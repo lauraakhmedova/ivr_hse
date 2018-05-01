@@ -16,6 +16,16 @@ class User(Base):
 	password  = Column(String(10), nullable=False)
 	mail = Column(String(25), nullable=False)
 
+class article(Base):
+
+    __tablename__='article'   
+    ID = Column(Integer, primary_key=True)
+    subject = Column(String(), nullable=False)
+    latitude = Column(String(), nullable=False)
+    longtitute = Column(String(), nullable=False)
+    added_by = Column(String(), nullable=False)
+    url = Column(String(), nullable=False)
+                
 
  
 engine = create_engine('sqlite:///users.db')

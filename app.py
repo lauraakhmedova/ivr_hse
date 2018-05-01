@@ -23,6 +23,13 @@ def make_message(subject, full_story, name, group):
     msg = ("%s <BR> %s <BR> отправлено: %s <BR> группа: %s"% (subject, full_story, name, group))
     return msg
 
+def get_all_files(p):
+    dirs_dict = {}
+    current_folder = os.path.join(os.path.dirname(__file__), p )
+    for path, subdirs, files in os.walk(current_folder):
+        for dir in subdirs:
+            dirs_dict[dir] = os.listdir(current_folder+ '//'+dir)
+    return dirs_dict
 
 @app.route('/addnews', methods = ["POST","GET"])
 def hello_world():
@@ -39,6 +46,23 @@ def hello_world():
 
 
 
+@app.route ('/', methods = ['GET','POST'])
+def articles_page():
+    articles_dirs = get_all_files('static/uploads')
+    articles = {} #словарь статей
+    pictures = {} #словарь картинок
+    path = ''
+    for key in articles_dirs:
+        for item in articles_dirs[key]:
+                if item.split(".")[1] == "txt":
+
+                    path = 'static/uploads/'+key +'/'+item
+                    with open(path, 'r') as f:
+                        articles[key] = f.read()
+                elif item.split(".")[1] in ['jpeg','jpg','png'] :
+                    pictures[key] = '/static/uploads/'+key +'/'+item
+    print(pictures)
+    return render('InstaInterest.html', articles = articles, pictures = pictures)
 
 
 
@@ -48,4 +72,4 @@ def hello_world():
 
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug = True)

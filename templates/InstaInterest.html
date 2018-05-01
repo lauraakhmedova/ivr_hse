@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>InstaInterest</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+      .display-1{
+      	text-align: center;
+      	color:#722227;
+      	background-color: #eec7c5;
+      } 
+
+      .jumbotron{
+      	background-color: #f4c6b1;
+      	padding: 20px;
+      	width:60%;
+      	margin:auto; 
+      	margin-bottom: 10px;
+      	margin-top: 10px;
+      	border-radius: 10px;
+      }
+      .container {
+      	padding: 10px;
+      }  
+      img {
+      	width: 400px;
+      	height: 300px;
+      	padding:  auto;
+      }
+
+
+    </style>
+</head>
+
+<body>
+	<h1 class="display-1">InstaInterest</h1>
+</body>
+
+{% for key in articles %}
+<div class="container">
+<div class="jumbotron">
+  <h1 align="center" class="display-4">{{key}}</h1>
+  <img align="center" src="{{pictures[key]}}">
+  <p class="lead" >{{articles[key]}}</p>
+ <!-- <hr class="my-4">-->
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="#" role="button">Узнать больше</a>
+  </p>
+</div>
+</div>
+{% endfor %}
+</html> 
