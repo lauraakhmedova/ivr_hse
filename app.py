@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -* -
 from flask import Flask
 from jinja2 import Template
 import jinja2
@@ -65,6 +65,11 @@ def articles_page():
     return render('InstaInterest.html', articles = articles, pictures = pictures)
 
 
+@app.route('/register', methods = ['GET','POST'])
+def add_artcle():
+    if request.method == "GET":
+        return render ('register.html')
+    #написать запрос данных к странице
 
 
 
