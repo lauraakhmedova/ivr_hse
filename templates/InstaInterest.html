@@ -31,11 +31,41 @@
 
 
     </style>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript">
+    </script>
+
+    <script type="text/javascript">
+    ymaps.ready(init);
+    var myMap
+      {% for i in range( l|length) %}
+        {{ ',myPlacemark%d'%i }}
+      {% endfor %}
+      ;
+
+    function init(){     
+        myMap = new ymaps.Map("map", {
+            center: [55.76, 37.64],
+            zoom: 7
+        });
+
+        {% for i in range(l|length) %}
+
+        {{"myPlacemark%d"%i}} = new ymaps.Placemark([{{l[i]["longit"]}}, {{l[i]["lat"]}} ], 
+        { 
+          hintContent: '{{l[i]["hintContent"]}}', 
+          balloonContent: '{{l[i]["balloonContent"]}}'});
+
+        myMap.geoObjects.add({{"myPlacemark%d"%i}})
+        {% endfor %}
+ 
+      }
+</script>
 </head>
 
 <body>
 	<h1 class="display-1">InstaInterest</h1>
-</body>
+  <div id="map" style="width: 80%; height: 200px; margin: auto;"></div>
+
 
 {% for key in articles %}
 <div class="container">
@@ -50,4 +80,5 @@
 </div>
 </div>
 {% endfor %}
+</body>
 </html> 

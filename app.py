@@ -62,7 +62,13 @@ def articles_page():
                 elif item.split(".")[1] in ['jpeg','jpg','png'] :
                     pictures[key] = '/static/uploads/'+key +'/'+item
     print(pictures)
-    return render('InstaInterest.html', articles = articles, pictures = pictures)
+    d1 = {"hintContent":'ЦПКИО им Горького',"balloonContent":"ФОнтанная площадь", "longit":"55.729126", "lat":"37.601452" }
+    d2 = {"hintContent":'ЦПКИО им Горького',"balloonContent":"Пионерский пруд", "longit":"55.730288", "lat":"37.605100" }
+    l = []
+    l.append(d1)
+    l.append(d2)
+    #print(l)
+    return render('InstaInterest.html', articles = articles, pictures = pictures, l=l)
 
 
 @app.route('/register', methods = ['GET','POST'])
