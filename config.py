@@ -1,2 +1,2 @@
-login = "lololo123laura456@gmail.com"
-password = "lolololaura2002"
+login = "9c9e1525dc2a080b029e82e85945ec6dd88eadd88e079453f3145a7091562f20"
+password = "3d9a1b783dc4bc8f93508518a273ab22a5a4595bae7aabd20fe7be26c68214b1"

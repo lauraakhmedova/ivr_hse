@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Регистрация</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+	{% include "cssjs.html"%}
 
 
     <style type="text/css">
@@ -18,6 +18,21 @@
     label{
     	color:#0093b7; 
     }
+     a:link {
+        text-decoration: none;
+      }
+
+      a:visited {
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+
+      a:active {
+          text-decoration: none;
+      }
 
     </style>
 
@@ -25,31 +40,51 @@
 
 </head>
 <body>
+  <!--<a href="/" id="h1-link"><h1 class="display-1" align="center">InstaInterest</h1></a>-->
+{% include "navbar.html" %}
 <div class="jumbotron">
-  <h1 class="display-4">Добро пожаловать в InstaInterest!</h1>
+  <h1 class="display-4">Добро пожаловать в <a href="/" id="h1-link">InstaInterest!</a></h1>
   <p class="lead" >Находите и делитесь новыми местами для фотографий</p>
   <hr class="my-4">
-  <form>
+  <table style="width:100%;">
+    <tr style="visibility:{{visibility_ok}}">
+      <td>
+        <div class="alert alert-success" role="alert" >
+          <h4 class="alert-heading">Спасибо! За регистрацию!</h4>
+          <p>Вы сможете добавить новый пост на <a href="/addnews" class="alert-link">по ссылке.</a> </p>
+        </div>
+      </td>
+    </tr>
+    <tr style="visibility:{{visibility_danger}}">
+      <td>
+        <div class="alert alert-danger" role="alert" >
+          <h4 class="alert-heading">"Пользователь с такой почтой уже существует"</h4>
+          <p>Воспользуйтесь другой почтой или попробуйте  <a href="/remember" class="alert-link">восстановить пароль.</a> </p>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <form method="post">
   	<div class="form-group">
     <label for="name">Имя</label>
-    <input class="form-control" type="text" placeholder="Введите имя" id="login">
+    <input class="form-control" type="text" placeholder="Введите имя" id="login" name="name">
   </div>
   <div class="form-group">
     <label for="name">Фамилия</label>
-    <input class="form-control" type="text" placeholder="Введите фамилию" id="login">
+    <input class="form-control" type="text" placeholder="Введите фамилию" name = "last_name">
   </div>
   <div class="form-group">
     <label for="exampleInputEmail1">Ваш E-Mail</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите e-mail">
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите e-mail" name="email">
     <small id="emailHelp" class="form-text text-muted">Это ваш логин.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Придумайте пароль</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль" name="password">
   </div>
   
   
-  <button type="submit" class="btn btn-primary" >Зарегистрироваться</button>
+  <button type="submit" name="register" class="btn btn-primary" >Зарегистрироваться</button>
 </form>
   
 

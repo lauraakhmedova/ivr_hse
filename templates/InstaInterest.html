@@ -2,39 +2,10 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>InstaInterest</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style type="text/css">
-      .display-1{
-      	text-align: center;
-      	color:#722227;
-      	background-color: #eec7c5;
-      } 
-
-      .jumbotron{
-      	background-color: #f4c6b1;
-      	padding: 20px;
-      	width:60%;
-      	margin:auto; 
-      	margin-bottom: 10px;
-      	margin-top: 10px;
-      	border-radius: 10px;
-      }
-      .container {
-      	padding: 10px;
-      }  
-      img {
-      	width: 400px;
-      	height: 300px;
-      	padding:  auto;
-      }
-
-
-    </style>
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript">
-    </script>
-
-    <script type="text/javascript">
+  {% include "cssjs.html"%}
+  <script type="text/javascript">
     ymaps.ready(init);
     var myMap
       {% for i in range( l|length) %}
@@ -45,7 +16,7 @@
     function init(){     
         myMap = new ymaps.Map("map", {
             center: [55.76, 37.64],
-            zoom: 7
+            zoom: 10
         });
 
         {% for i in range(l|length) %}
@@ -53,29 +24,118 @@
         {{"myPlacemark%d"%i}} = new ymaps.Placemark([{{l[i]["longit"]}}, {{l[i]["lat"]}} ], 
         { 
           hintContent: '{{l[i]["hintContent"]}}', 
-          balloonContent: '{{l[i]["balloonContent"]}}'});
+          balloonContent: '<a href="#{{l[i]["balloonContent"]}}"> {{l[i]["balloonContent"]}} </a>'});
 
         myMap.geoObjects.add({{"myPlacemark%d"%i}})
         {% endfor %}
  
       }
-</script>
+  </script>
+  <script type="text/javascript">
+    function setValue(v) {
+       document.getElementById('deleteUrl').value = v
+    }
+  </script>
+    <style type="text/css">
+      .display-1{
+      	text-align: center;
+      	color:#722227;
+      	//background-color: #eec7c5;
+      } 
+      .jumbotron{
+      	background-color: #ffff;
+      	padding-left: auto;
+        padding-right: auto;
+        overflow: auto;
+      	//width:70%;
+        min-width: 326px;
+      	//margin-left:5%; 
+        //margin-right: 5%;
+      	border-radius: 10px;
+      }
+      .container {
+      	padding: 10px;
+      }  
+      iframe {
+        align:center;
+        margin:auto;
+      }
+      img {max-width:100%;height:auto;margin: auto;float: none;display: block;
+      margin: 0 auto; }
+      .display-4 {
+        //max-width: 100%;
+        word-wrap: break-word;
+        height: auto;
+        margin: auto;
+      }
+      #buttn-div {
+        width: 90%; 
+        margin: auto;
+        text-align: right;
+      }
+      #button-table {
+        text-align: right; //выровнять по правому краю, возможно
+      }
+
+      a:link {
+        text-decoration: none;
+      }
+
+      a:visited {
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+
+      a:active {
+          text-decoration: none;
+      }
+
+    </style>
+    
+
+   
 </head>
 
-<body>
-	<h1 class="display-1">InstaInterest</h1>
-  <div id="map" style="width: 80%; height: 200px; margin: auto;"></div>
+<body style="padding-top: 60px;">
+ {% include "navbar.html" %}
+  
 
 
-{% for key in articles %}
+  <div id="map" style="width: 90%; height: 200px; margin: auto;"></div>
+  
+
+
+{% for t in articles %}
 <div class="container">
-<div class="jumbotron">
-  <h1 align="center" class="display-4">{{key}}</h1>
-  <img align="center" src="{{pictures[key]}}">
-  <p class="lead" >{{articles[key]}}</p>
- <!-- <hr class="my-4">-->
+<div class="jumbotron" align="center">
+  <a name="{{t[0]}}"><h1 align="center" >{{t[0]}}</h1></a>
+    <blockquote class="blockquote text-right">
+      <footer class="blockquote-footer">{{t[3]}}</footer>
+      <footer class="blockquote-footer">{{t[6]}}</footer>
+    </blockquote>
+  {% if t[4][:4] == "http" %}
+  <img align="center" src="{{t[4]}}">
+  {% else %}
+  {% include "instagram.html" %}
+  {% endif %}
+  <p class="lead" >{{t[5]}}</p>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Узнать больше</a>
+    {% if cookies_login == t[3] or cookies_login == "superuser" %}
+    <table align="center">
+      <tr>
+        <td style="text-align: right;">
+         <a href="edit/{{ t[2]~t[1] }}" role="button" class="btn btn-link">Редактировать</a>
+        </td>
+        <td style="text-align: left;">
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal" onclick="setValue('{{t[2]~t[1]}}')")>Удалить</button>
+        </td>
+      </tr>
+      </table>
+      {% include "modal_delete.html" %}
+    {% endif %}
   </p>
 </div>
 </div>

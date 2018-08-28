@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Добавьте новый пост</title>
+	{% include "cssjs.html"%}
+
+
+    <style type="text/css">
+    h1{
+    	color:#005f89;
+    }
+    .lead{
+    	color:#0093b7;
+    }
+    .jumbotron{
+    	background-color:#fff; 
+    }
+    label{
+    	color:#0093b7;
+      margin-top:  10px;
+    }
+    .form-check-label {
+      margin-top:  0;
+      margin-bottom: 10px;
+    }
+
+    </style>
+  <style type="text/css">
+    table {
+      width: 100%;
+
+    }
+  </style>
+</head>
+<body>
+{% include "navbar.html" %}
+<div class="jumbotron">
+  <h1 class="display-4">Добавьте новое место</h1>
+  <p class="lead" >Следуйте инструкциям и все получится</p>
+  <hr class="my-4">
+  <table>
+    <tr style="visibility:{{visibility_ok}}">
+      <td>
+        <div class="alert alert-success" role="alert" >
+          <h4 class="alert-heading">Спасибо! Данные добавлены!</h4>
+          <p>Вы сможете увидеть ваш пост на <a href="/" class="alert-link">главной странице.</a> </p>
+        </div>
+      </td>
+    </tr>
+    <tr style="visibility:{{visibility_danger}}">
+      <td>
+        <div class="alert alert-danger" role="alert" >
+          <h4 class="alert-heading">"Данные с такимим координатами уже существуют". Или у вас непраильный формат ссылки. Проверьте еще раз</h4>
+          <p>Посмотрите нимательнее информаию о вашем месте на <a href="/" class="alert-link">главной странице.</a> </p>
+        </div>
+      </td>
+    </tr>
+  </table>
+  
+  <form method="POST">
+  	<div class="form-group">
+    <label for="subject">Название места</label>
+    <input class="form-control" type="text" placeholder="Введите название места" id="login" name="subject" >
+    <label for="latitude">Широта (для метки на карте)</label>
+    <input class="form-control" type="text" placeholder="Введите широту на кторой расположен объект" id="login" name="latitude">
+    <label for="longitude">Долгота (для метки на карте)</label>
+    <input class="form-control" type="text" placeholder="Введите долготу на кторой расположен объект" id="login" name="longitude">
+    <label for="details">Почему вы добавили это место?</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="details"></textarea>
+    <label for="longitude">Ссылка на фото</label>
+    <input class="form-control" type="text" placeholder="Введите ссылку на фото или на фото в инстаграм" id="login" name="pic_url">
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="instaCheck" name="instaCheck">
+    <label class="form-check-label" for="instaCheck" >
+    Отметьте, если ссылка выше на фото в Instagram
+    </label>
+  </div>
+  
+  <button type="submit" class="btn btn-primary" >Добавить</button>
+</form>
+  
+
+</div>
+</body>
+</html>
