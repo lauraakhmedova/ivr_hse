@@ -3,8 +3,17 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>InstaInterest</title>
-  {% include "cssjs.html"%}
+	<title>WhereToPhoto?</title>
+  {% include "cssjs.html"%} <!-- Команда библиотеки Jinja2 -->
+  
+  <!-- Скрипт для кнопки удаления отправляет -->
+  <script type="text/javascript"> 
+    function setDeleteValue(v) {
+       document.getElementById('deleteUrl').value = v
+    }
+  </script>
+    
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
   <script type="text/javascript">
     ymaps.ready(init);
     var myMap
@@ -16,7 +25,7 @@
     function init(){     
         myMap = new ymaps.Map("map", {
             center: [55.76, 37.64],
-            zoom: 10
+            zoom: 7
         });
 
         {% for i in range(l|length) %}
@@ -30,71 +39,7 @@
         {% endfor %}
  
       }
-  </script>
-  <script type="text/javascript">
-    function setValue(v) {
-       document.getElementById('deleteUrl').value = v
-    }
-  </script>
-    <style type="text/css">
-      .display-1{
-      	text-align: center;
-      	color:#722227;
-      	//background-color: #eec7c5;
-      } 
-      .jumbotron{
-      	background-color: #ffff;
-      	padding-left: auto;
-        padding-right: auto;
-        overflow: auto;
-      	//width:70%;
-        min-width: 326px;
-      	//margin-left:5%; 
-        //margin-right: 5%;
-      	border-radius: 10px;
-      }
-      .container {
-      	padding: 10px;
-      }  
-      iframe {
-        align:center;
-        margin:auto;
-      }
-      img {max-width:100%;height:auto;margin: auto;float: none;display: block;
-      margin: 0 auto; }
-      .display-4 {
-        //max-width: 100%;
-        word-wrap: break-word;
-        height: auto;
-        margin: auto;
-      }
-      #buttn-div {
-        width: 90%; 
-        margin: auto;
-        text-align: right;
-      }
-      #button-table {
-        text-align: right; //выровнять по правому краю, возможно
-      }
-
-      a:link {
-        text-decoration: none;
-      }
-
-      a:visited {
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: none;
-      }
-
-      a:active {
-          text-decoration: none;
-      }
-
-    </style>
-    
+  </script>  
 
    
 </head>
@@ -107,22 +52,43 @@
   <div id="map" style="width: 90%; height: 200px; margin: auto;"></div>
   
 
-
+{% include "modal_delete.html" %}
 {% for t in articles %}
-<div class="container">
+<div class="container" style="max-width: 537px; margin-bottom: 0px; ">
 <div class="jumbotron" align="center">
   <a name="{{t[0]}}"><h1 align="center" >{{t[0]}}</h1></a>
     <blockquote class="blockquote text-right">
       <footer class="blockquote-footer">{{t[3]}}</footer>
-      <footer class="blockquote-footer">{{t[6]}}</footer>
+      <footer class="blockquote-footer">{{t[6]}}</footer> 
     </blockquote>
-  {% if t[4][:4] == "http" %}
-  <img align="center" src="{{t[4]}}">
-  {% else %}
-  {% include "instagram.html" %}
-  {% endif %}
-  <p class="lead" >{{t[5]}}</p>
-  <p class="lead">
+  <table>
+    <tr>
+      <td>
+      {% if t[4][:4] == "http" %}
+        <img align="center" src="{{t[4]}}">
+      {% else %}
+        {% include "instagram.html" %}
+      {% endif %}
+      <p align="left" class="lead" >{{t[5]}}</p>
+      <p class="lead"></p>
+    </td>
+    <td valign="top" style="width: 44px;">
+      <form method="post" style="margin: 0px; padding: 0px;">
+        <button name = "like" value = "{{t[2]~t[1]}}" type="submit" class="btn btn-light" style="min-width: 100%; ">
+          <span>
+            <img style="width: 10px;" src="/static/icons/heart-4x.png"> 
+              {% if t[7] > 0 %} 
+                <p>{{t[7]}}</p>
+              {% endif %}
+          </span>
+        </button>
+        <button type="button" class="btn btn-light" >
+          <a href="comments/{{ t[2]~t[1] }}"><img src="/static/icons/comment-square-2x.png"></a>
+        </button>
+      </form>
+    </tr>
+  </table>
+
     {% if cookies_login == t[3] or cookies_login == "superuser" %}
     <table align="center">
       <tr>
@@ -130,11 +96,10 @@
          <a href="edit/{{ t[2]~t[1] }}" role="button" class="btn btn-link">Редактировать</a>
         </td>
         <td style="text-align: left;">
-            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal" onclick="setValue('{{t[2]~t[1]}}')")>Удалить</button>
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal" onclick="setDeleteValue('{{t[2]~t[1]}}')")>Удалить</button>
         </td>
       </tr>
       </table>
-      {% include "modal_delete.html" %}
     {% endif %}
   </p>
 </div>

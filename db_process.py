@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_users import User, Base, Article
+from db_users import User, Base, Article, Comments
 from sqlalchemy import desc
 from sqlalchemy.pool import StaticPool
 import hashlib
+
 def init_db(db_name = 'sqlite:///users.db'):
 	engine = create_engine(db_name,connect_args={'check_same_thread': False})
 	Base.metadata.bind = engine
@@ -18,8 +19,6 @@ def check_user(email):
 
 def add_user(name, lastName, group, password, mail):
 	session = init_db()
-	#password = password.encode('utf-8')
-	#password = hashlib.sha256(password).hexdigest()
 	new_user = User(name = name, lastName = lastName, 
 		group = group, password = password, mail = mail)
 	session.add(new_user)
@@ -40,7 +39,7 @@ def add_post(subject, latitude, longitude, added_by, pic_url, description):
 		new_article = Article(subject = subject, latitude = latitude,
 		                  longitude = longitude, added_by = added_by, pic_url = pic_url,
 		                  description = description,
-		                  url = url )
+		                  url = url, likes = 0)
 		session.add(new_article)
 		session.commit()
 		return True
@@ -70,7 +69,6 @@ def delete_post(url):
 	session = init_db()
 	try:
 		post = session.query(Article).filter(Article.url == url).delete()
-		print(post)
 		session.commit()
 		return True
 	except Exception as err:
@@ -81,9 +79,30 @@ def get_all_posts():
 	session = init_db()
 	posts = session.query(Article.subject, Article.latitude, 
 		Article.longitude, Article.added_by, Article.pic_url, 
-		Article.description,Article.created_at).order_by(desc(Article.created_at)).all()
+		Article.description,Article.created_at, Article.likes).order_by(desc(Article.created_at)).all()
 	return posts
 
+def add_like(url):
+	session = init_db()
+	post = session.query(Article).filter(Article.url == url).update({"likes": (Article.likes + 1)})
+	session.commit()
 
-#print(get_all_posts())
-#add_user("punk", "punk", "ia-11", "123","default")
+def add_comment(comment, url):
+	session = init_db()
+	post_id = session.query(Article.ID).filter(Article.url == url)
+	comm = Comments(user = comment['user'], text = comment['text'], article_id = post_id)
+	session.add(comm)
+	session.commit()
+
+def get_all_comments(url):
+	session = init_db()
+	post_id = session.query(Article.ID).filter(Article.url == url)
+	comments = session.query(Comments.text, Comments.user, Comments.id).filter(Comments.article_id == post_id).all()
+	return comments
+def delete_comment(id):
+	session = init_db()
+	comm = session.query(Comments).filter(Comments.id == id).delete()
+	session.commit()
+
+def count_comments(url):
+	return len(get_all_comments(url))

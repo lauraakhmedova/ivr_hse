@@ -5,8 +5,7 @@ import jinja2
 import os
 from flask import request
 from flask import make_response, session, redirect, url_for, escape
-from db_process import add_post, get_all_posts,\
- log_in, check_user, add_user, get_article, update_article, delete_post
+from db_process import *
 import hashlib
 import config
 
@@ -100,13 +99,17 @@ def addnews():
 @app.route ('/', methods = ['GET','POST'])
 def articles_page():
     if request.method == "POST":
+        if "like" in request.form:
+            url = request.form["like"]
+            add_like(url)
+            return redirect(url_for("articles_page"))
         if "logout" in request.form:
             return logout()
         elif "delete" in request.form:
             url = request.form["deleteurl"]
             if delete_post(url):
                 return redirect(url_for("articles_page"))
-        else:
+        elif "enter" in request.form:
             login = request.form["login"]
             password = request.form["password"]
             return main_page_with_login(login, password)
@@ -178,25 +181,30 @@ def admin():
             return render("admin.html")
 
 
+@app.route("/comments/<path:url>",methods = ['GET','POST'])
+def comments(url):
+    comment = {}
+    t = get_article(url)
+    visibility = "visible" if check_session() else "collapse"
+    comments = get_all_comments(url)
+    if request.method == "GET":
+        return(render("comments.html", t = t, visibility = visibility, comments = comments, 
+            username = escape(session['username'])))
+    if request.method == "POST":
+        if "logout" in request.form:
+            return logout()
+        if "add_comment_button" in request.form:
+            comment['text'] = request.form['text']
+            url = request.form['add_comment_button']
+            comment['user'] = escape(session['username'])
+            add_comment(comment, url)
+        elif "deletecomment" in request.form:
+            comment_id = request.form['deletecomment']
+            delete_comment(comment_id)
+        return(redirect(url_for("comments", url = url)))
 
 app.secret_key = b'hx\x85\r5/\xf2\xe5c&\x0c&\x9d\xff\xc7\xe8\xbc\x01%#h\x99/Y'
 if __name__ == '__main__':
-	app.run(debug = True)
+    app.run(debug = True)
 
 
-
-#old articcles page just in case
-'''articles_dirs = get_all_files('static/uploads')
-    articles = {} #словарь статей
-    pictures = {} #словарь картинок
-    path = ''
-    for key in articles_dirs:
-        for item in articles_dirs[key]:
-                if item.split(".")[1] == "txt":
-
-                    path = 'static/uploads/'+key +'/'+item
-                    with open(path, 'r') as f:
-                        articles[key] = f.read()
-                elif item.split(".")[1] in ['jpeg','jpg','png'] :
-                    pictures[key] = '/static/uploads/'+key +'/'+item
-    print(pictures)'''

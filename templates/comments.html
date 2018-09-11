@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  {% include "cssjs.html" %}
+
+  <title>{{t[0]}}</title>
+</head>
+<body>
+  {% include "navbar.html" %}
+  <div class="container" style="max-width: 537px; margin-bottom: 0px; ">
+  <div class="jumbotron" align="center" style="margin-bottom: 5px; padding-bottom: 5px;">
+    <a name="{{t[0]}}"><h1 align="center" >{{t[0]}}</h1></a>
+      <blockquote class="blockquote text-right">
+        <footer class="blockquote-footer">{{t[3]}}</footer>
+        <footer class="blockquote-footer">{{t[6]}}</footer> 
+      </blockquote>
+        {% if t[4][:4] == "http" %}
+          <img align="center" src="{{t[4]}}">
+        {% else %}
+          {% include "instagram.html" %}
+        {% endif %}
+        <p align="left" class="lead" >{{t[5]}}</p>
+      </div>
+      <!--comments section-->
+      {% for comment in comments  %}
+        <ul class="list-group">
+        
+      <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{comment[0]}}</h5>
+      {% if username == "superuser" %}
+      <form method="post">
+        <button class="btn btn-link" type="submit" name="deletecomment" value="{{comment[2]}}"><small class="text-muted">Удалить</small></button>
+      </form>
+      {% endif %}
+      </div>
+        <p class="mb-1"></p>
+        <small class="text-muted">{{comment[1]}}</small>
+        <hr class="my-4">
+        </ul>
+        <hr>
+      {% endfor %}
+      <form method="POST">
+        <div class="form-group">
+          <label for="commentForm">Ваш комментарий</label>
+          <textarea class="form-control" name="text" id="commentForm" rows="3" style="margin-bottom: 5px;"></textarea>
+          <button type="submit" class="btn btn-light" name = "add_comment_button" align = right value="{{ t[2]~t[1] }}">Отправить</button>
+        </div>
+      </form>
+    </div>
+
+</body>
+</html>
