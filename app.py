@@ -49,11 +49,11 @@ def main_page_with_login(login, password):
     data = get_all_posts()
     l = invoke_coords(data)
     if log_in(login, password):
-        resp = make_response(render('InstaInterest.html', articles = data, l=l, visibility = "visible", cookies_login = login))
+        resp = make_response(render('index.html', articles = data, l=l, visibility = "visible", cookies_login = login))
         set_session(login,password)
         return resp
     else:
-        resp = make_response(render('InstaInterest.html', articles = data, l=l, visibility = "collapse"))
+        resp = make_response(render('index.html', articles = data, l=l, visibility = "collapse"))
         return clear_session()
 
 def invoke_coords(data):
@@ -67,7 +67,7 @@ def invoke_coords(data):
 def logout():
     data = get_all_posts()
     l = invoke_coords(data)
-    resp = make_response(render('InstaInterest.html', articles = data, l=l,visibility = "hidden"))
+    resp = make_response(render('index.html', articles = data, l=l,visibility = "hidden"))
     return clear_session()
 
 @app.route('/addnew', methods = ["POST","GET"])
@@ -109,15 +109,17 @@ def articles_page():
             url = request.form["deleteurl"]
             if delete_post(url):
                 return redirect(url_for("articles_page"))
-        elif "enter" in request.form:
+        else:
             login = request.form["login"]
             password = request.form["password"]
             return main_page_with_login(login, password)
     else:
+        if not check_session():
+            return redirect(url_for("start_page"))
         visibility = "visible" if check_session() else "collapse"  
         data = get_all_posts()
         l = invoke_coords(data)
-        resp = make_response(render('InstaInterest.html', articles = data, l=l,
+        resp = make_response(render('index.html', articles = data, l=l,
             visibility = visibility, cookies_login = session["username"]  if visibility == "visible" else ""))
         return resp
 
@@ -203,8 +205,29 @@ def comments(url):
             delete_comment(comment_id)
         return(redirect(url_for("comments", url = url)))
 
+@app.route("/users",methods = ['GET','POST'])
+def user_list():
+    if escape(session['username']) == 'superuser':
+        users = get_all_users()
+        print(users)
+    return render("users.html", users = users)
+
+
+@app.route("/start",methods = ['GET','POST'])
+def start_page():
+    if request.method == "POST":
+        login = request.form["email"]
+        password = request.form["password"]
+        set_session(login, password)
+        return redirect(url_for("articles_page"))
+    else:
+        if not check_session():
+            return render("start.html")
+        return redirect(url_for("articles_page"))
+
 app.secret_key = b'hx\x85\r5/\xf2\xe5c&\x0c&\x9d\xff\xc7\xe8\xbc\x01%#h\x99/Y'
 if __name__ == '__main__':
-    app.run(debug = True)
+	app.run(debug = True)
+
 
 

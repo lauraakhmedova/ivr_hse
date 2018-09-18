@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Users</title>
+	{% include "cssjs.html" %}
+</head>
+<body>
+	<div></div>
+	<ul class="list-group" style="margin-top: 10%">
+		{% for user in users %}
+	  		<li align="center" class="list-group-item"><span>{{user[0]}}</span> &nbsp <span>{{user[1]}}</span> &nbsp <span>{{user[2]}}</span></li>
+		
+	  	{% endfor %}
+	</ul>
+</body>
+</html>
