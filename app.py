@@ -218,11 +218,16 @@ def start_page():
     if request.method == "POST":
         login = request.form["email"]
         password = request.form["password"]
-        set_session(login, password)
-        return redirect(url_for("articles_page"))
+        password = hashlib.sha256(password.encode("utf-8")).hexdigest()
+        if log_in(login, password):
+            set_session(login, password)
+            return redirect(url_for("articles_page"))
+        else:
+            return render("start.html", error = "visible")
+
     else:
         if not check_session():
-            return render("start.html")
+            return render("start.html", error = "hidden")
         return redirect(url_for("articles_page"))
 
 app.secret_key = b'hx\x85\r5/\xf2\xe5c&\x0c&\x9d\xff\xc7\xe8\xbc\x01%#h\x99/Y'
