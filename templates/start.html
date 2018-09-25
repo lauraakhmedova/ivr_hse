@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>WhereToPhoto?</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title>WhereToPhoto?</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     
 
     <style type="text/css">
       .display-4{
-      	text-align: center;
-      	color:#005f89;
+        text-align: center;
+        color:#005f89;
       } 
 
       .lead{
-      	text-align: center;
+        text-align: center;
       }
 
       .jumbotron{
@@ -22,21 +22,21 @@
       }
 
       .container{
-      	background-color: #e6eceb;
+        background-color: #e6eceb;
         padding: 50px;
         width:600px;
         margin:auto;
         border-radius: 10px;
         margin-bottom:50px;
-      	margin-top: 50px;
+        margin-top: 50px;
       }
 
       .form-control{
-      	max-width: 500px;
-      	margin:auto;
+        max-width: 500px;
+        margin:auto;
 
       }
-      	
+        
     </style>
 
 
@@ -58,6 +58,7 @@
     <label for="InputPassword" style="color: #005f89">Пароль</label>
     <input type="password" class="form-control" id="InputPassword" placeholder="Введите пароль" name="password">
   </div>
+      <p style="visibility: {{error}}; color: #F00;">Неверный логин или пароль</p>
       <button type="submit" class="btn btn-primary" name = "login">Войти</button>
     </form>
     <br>
