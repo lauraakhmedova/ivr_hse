@@ -230,6 +230,14 @@ def start_page():
             return render("start.html", error = "hidden")
         return redirect(url_for("articles_page"))
 
+@app.route("/help",methods = ['GET','POST'])
+def help():
+    if request.method == "POST":
+        if "logout" in request.form:
+            return logout()
+    else:
+        return render("help.html",visibility = "visible" if check_session() else "collapse")
+
 app.secret_key = b'hx\x85\r5/\xf2\xe5c&\x0c&\x9d\xff\xc7\xe8\xbc\x01%#h\x99/Y'
 if __name__ == '__main__':
 	app.run(debug = True)
