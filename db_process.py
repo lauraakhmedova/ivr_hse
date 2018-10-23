@@ -102,14 +102,14 @@ def dislike(url, mail):
 	liked = session.query(User).filter(User.mail == mail).update({"liked":new_liked})
 	session.commit()
 
-def add_comment(comment, url): #добавление комментария
+def add_comment(comment, url): 
 	session = init_db()
 	post_id = session.query(Article.ID).filter(Article.url == url)
 	comm = Comments(user = comment['user'], text = comment['text'], article_id = post_id)
 	session.add(comm)
 	session.commit()
 
-def get_all_comments(url): #получение всех коментов для одного поста
+def get_all_comments(url): 
 	session = init_db()
 	post_id = session.query(Article.ID).filter(Article.url == url)
 	comments = session.query(Comments.text, Comments.user, Comments.id).filter(Comments.article_id == post_id).all()
@@ -131,4 +131,8 @@ def get_all_users():
 def get_liked(mail):
 	session = init_db()
 	return session.query(User.liked).filter(User.mail == mail).one_or_none()
-#нужно вствить этот список в session, оттуда резать на части
+
+def delete_user(mail):
+	session = init_db()
+	comm = session.query(User).filter(User.mail == mail).delete()
+	session.commit()

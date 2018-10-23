@@ -214,10 +214,16 @@ def comments(url):
 
 @app.route("/users",methods = ['GET','POST'])
 def user_list():
-    if escape(session['username']) == 'superuser':
-        users = get_all_users()
-        print(users)
-    return render("users.html", users = users)
+    if request.method == 'GET':
+        if escape(session['username']) == 'superuser':
+            users = get_all_users()
+            #print(users)
+            return render("users.html", users = users)
+    else:
+        mail = request.form['delete']
+        delete_user(mail)
+        return redirect(url_for('user_list'))
+    
 
 
 @app.route("/start",methods = ['GET','POST'])

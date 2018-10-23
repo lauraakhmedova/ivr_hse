@@ -5,12 +5,15 @@
 	{% include "cssjs.html" %}
 </head>
 <body>
-	<div></div>
-	<ul class="list-group" style="margin-top: 10%">
-		{% for user in users %}
-	  		<li align="center" class="list-group-item"><span>{{user[0]}}</span> &nbsp <span>{{user[1]}}</span> &nbsp <span>{{user[2]}}</span></li>
-		
-	  	{% endfor %}
-	</ul>
+	<form method="POST">
+		<ul class="list-group" style="margin-top: 10%">
+			{% for user in users %}
+		  		<li align="center" class="list-group-item">
+		  			<span>{{user[0]}}</span> &nbsp <span>{{user[1]}}</span> &nbsp <span>{{user[2]}}</span><button type="submit" value="{{user[2]}}" name="delete" class="btn btn-danger" style="margin-left: 10px">Удалить</button>
+		  		</li>
+			
+		  	{% endfor %}
+		</ul>
+	</form>
 </body>
 </html>
