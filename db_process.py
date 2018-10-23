@@ -88,8 +88,8 @@ def add_like(url, mail): #добавление лайка
 	session = init_db()
 	post = session.query(Article).filter(Article.url == url).update({"likes": (Article.likes + 1)})
 	liked = session.query(User.liked).filter(User.mail == mail).one_or_none()
+	new_liked = url if liked[0] == None else liked[0] + url
 
-	new_liked = url if liked == None else liked[0] + url
 	liked = session.query(User).filter(User.mail == mail).update({"liked":new_liked})
 	session.commit()
 

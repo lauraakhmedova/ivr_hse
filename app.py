@@ -219,6 +219,8 @@ def user_list():
             users = get_all_users()
             #print(users)
             return render("users.html", users = users)
+        else:
+            return "<h1> В доступе отказано!</h1>"
     else:
         mail = request.form['delete']
         delete_user(mail)
