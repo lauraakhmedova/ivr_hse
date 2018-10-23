@@ -101,7 +101,11 @@ def articles_page():
     if request.method == "POST":
         if "like" in request.form:
             url = request.form["like"]
-            add_like(url)
+            add_like(url, escape(session['username']))
+            return redirect(url_for("articles_page"))
+        if "dislike" in request.form:
+            url = request.form["dislike"]
+            dislike(url, escape(session['username']))
             return redirect(url_for("articles_page"))
         if "logout" in request.form:
             return logout()
@@ -119,8 +123,11 @@ def articles_page():
         visibility = "visible" if check_session() else "collapse"  
         data = get_all_posts()
         l = invoke_coords(data)
+        liked = '' if get_liked(escape(session['username'])) == None else get_liked(escape(session['username']))[0]
+        print(liked)
         resp = make_response(render('index.html', articles = data, l=l,
-            visibility = visibility, cookies_login = session["username"]  if visibility == "visible" else ""))
+            visibility = visibility, cookies_login = session["username"]  if visibility == "visible" else "", 
+            liked = liked))
         return resp
 
 
@@ -230,6 +237,7 @@ def start_page():
             return render("start.html", error = "hidden")
         return redirect(url_for("articles_page"))
 
+
 @app.route("/help",methods = ['GET','POST'])
 def help():
     if request.method == "POST":
@@ -237,7 +245,7 @@ def help():
             return logout()
     else:
         return render("help.html",visibility = "visible" if check_session() else "collapse")
-
+        
 app.secret_key = b'hx\x85\r5/\xf2\xe5c&\x0c&\x9d\xff\xc7\xe8\xbc\x01%#h\x99/Y'
 if __name__ == '__main__':
 	app.run(debug = True)

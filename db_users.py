@@ -10,13 +10,14 @@ from sqlalchemy.pool import StaticPool
 Base = declarative_base()
 
 class User(Base):
-	__tablename__='user'
-	ID = Column(Integer, primary_key=True)
-	name = Column(String(25), nullable=False)
-	lastName = Column(String(25), nullable=False)
-	group = Column(String(5), nullable=False)
-	password  = Column(String(10), nullable=False)
-	mail = Column(String(25), nullable=False)
+    __tablename__='user'
+    ID = Column(Integer, primary_key=True)
+    name = Column(String(25), nullable=False)
+    lastName = Column(String(25), nullable=False)
+    group = Column(String(5), nullable=False)
+    password  = Column(String(10), nullable=False)
+    mail = Column(String(25), nullable=False)
+    liked = Column(String())
 
 class Article(Base):
     __tablename__='article'   

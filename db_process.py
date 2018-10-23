@@ -84,9 +84,22 @@ def get_all_posts(): #получение всех постов
 		Article.description,Article.created_at, Article.likes).order_by(desc(Article.created_at)).all()
 	return posts
 
-def add_like(url): #добавление лайка
+def add_like(url, mail): #добавление лайка
 	session = init_db()
 	post = session.query(Article).filter(Article.url == url).update({"likes": (Article.likes + 1)})
+	liked = session.query(User.liked).filter(User.mail == mail).one_or_none()
+
+	new_liked = url if liked == None else liked[0] + url
+	liked = session.query(User).filter(User.mail == mail).update({"liked":new_liked})
+	session.commit()
+
+def dislike(url, mail):
+	session = init_db()
+	post = session.query(Article).filter(Article.url == url).update({"likes": (Article.likes - 1)})
+	liked = session.query(User.liked).filter(User.mail == mail).one_or_none()
+
+	new_liked = liked[0].replace(url,'')
+	liked = session.query(User).filter(User.mail == mail).update({"liked":new_liked})
 	session.commit()
 
 def add_comment(comment, url): #добавление комментария
@@ -114,3 +127,8 @@ def get_all_users():
 	session = init_db()
 	users = session.query(User.name, User.lastName, User.mail).order_by(desc(User.lastName)).all()
 	return users
+
+def get_liked(mail):
+	session = init_db()
+	return session.query(User.liked).filter(User.mail == mail).one_or_none()
+#нужно вствить этот список в session, оттуда резать на части

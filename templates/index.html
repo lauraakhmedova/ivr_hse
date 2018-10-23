@@ -24,7 +24,7 @@
     function init(){     
         myMap = new ymaps.Map("map", {
             center: [55.76, 37.64],
-            zoom: 7
+            zoom: 12
         });
 
         {% for i in range(l|length) %}
@@ -73,9 +73,9 @@
     </td>
     <td valign="top" style="width: 44px;">
       <form method="post" style="margin: 0px; padding: 0px;">
-        <button name = "like" value = "{{t[2]~t[1]}}" type="submit" class="btn btn-light" style="min-width: 100%; ">
+        <button {% if  liked != None and  t[2]~t[1] in liked   %} name = "dislike" {% else %}name = "like" {% endif %} value = "{{t[2]~t[1]}}" type="submit" class="btn btn-light" style="min-width: 100%; "  >
           <span>
-            <img style="width: 10px;" src="/static/icons/heart-4x.png"> 
+            <img style="width: 10px;" src="/static/icons/heart-4x.png" > 
               {% if t[7] > 0 %} 
                 <p>{{t[7]}}</p>
               {% endif %}
