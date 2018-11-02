@@ -161,7 +161,9 @@ def edit(url):
     if request.method == "GET":
         return render("edit.html", visibility_ok = "collapse", visibility_danger = "collapse",t = t)
     else:
+        
         subject = request.form['subject']
+        print('longitude')
         latitude = request.form['latitude']
         longitude = request.form['longitude']
         pic_url = request.form['pic_url']
